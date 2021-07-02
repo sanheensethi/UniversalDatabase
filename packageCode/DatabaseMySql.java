@@ -12,6 +12,7 @@ public class DatabaseMySql{
 	private Connection con = null;
 	private ResultSet rs = null;
 	private Statement stmt = null;
+	private PreparedStatement pstmt = null;
 	private int whereFlag = 0;
 
 	public DatabaseMySql(String url,String db,String user,String pass) {
@@ -85,7 +86,8 @@ public class DatabaseMySql{
 		this.query = this.query+"?)";
 		this.lastQuery = this.query;
 		try{
-			return this.con.prepareStatement(this.query);
+			this.pstmt = this.con.prepareStatement(this.query);
+			return this.pstmt;
 		}catch(SQLException e){
 			System.out.println(e);
 			return null;
@@ -94,6 +96,31 @@ public class DatabaseMySql{
 			Reference : 
 			https://docs.oracle.com/javase/7/docs/api/java/sql/PreparedStatement.html
 		*/
+	}
+
+	public DatabaseMySql insert(String table,int unknowns,String ... ids){
+		this.pstmt = pInsert(table,unknowns,ids);
+		return this;
+	}
+
+	public DatabaseMySql setValues(ArrayList<Object> values){
+		int i=0;
+		for(;i<values.size();i++){
+			String type = values.get(i).getClass().getSimpleName();
+			System.out.println(type);
+			if(type == "Integer"){
+				this.pstmt.setInt(i+1,values.get(i));
+			}else if(type == "Double"){
+				this.pstmt.setDouble(i+1,values.get(i));
+			}else if(type == "Float"){
+				this.pstmt.setFloat(i+1,values.get(i));
+			}else if(type == "Boolean"){
+				this.pstmt.setBoolean(i+1,values.get(i));
+			}else if(type == "Long"){
+				this.pstmt.setLong(i+1,values.get(i));
+			}
+		}
+		return this;
 	}
 
 	public ResultSet srun(){
@@ -120,6 +147,5 @@ public class DatabaseMySql{
 	public String getQuery(){
 		return this.lastQuery;
 	}
-	
 
 }
