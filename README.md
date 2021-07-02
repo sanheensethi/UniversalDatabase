@@ -20,7 +20,7 @@ DatabaseMySql(String url,String db,String user,String pass)
 
 > Methods:
 
-1. select(String ... columns)
+1. `select(String ... columns)`
 
 - You can pass multiple arguments also as columns names which you want to take result, by defaut it select all columns.
 
@@ -35,17 +35,17 @@ Example:
     ResultSet rs = sql.select("column1","column2","column4").from("tablename").srun();
 ```
 
-2. from(String tablename)
+2. `from(String tablename)`
 
 - Used with select command.
 
 - ReturnType ```DatabaseMySql``` Object.
 
-3. srun()
+3. `srun()`
 
 - ReturnType ```ResultSet```
 
-4. pInsert(String tablename,int unknwons,String ... parameters)
+4. `pInsert(String tablename,int unknwons,String ... parameters)`
 
 - It return the prepared statement of INSERT command.
 
